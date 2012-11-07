@@ -2,7 +2,6 @@
   "name": "juleblogg",
   "version": "0.0.1",
   "dependencies": {
-    "bacon": "0.0.1",
     "ar-drone": "0.0.4"
   }
 }
