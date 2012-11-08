@@ -2,6 +2,8 @@
   "name": "juleblogg",
   "version": "0.0.1",
   "dependencies": {
-    "ar-drone": "0.0.4"
+    "ar-drone": "0.0.4",
+    "winston": "~0.6.2",
+    "linestream": "~0.3.2"
   }
 }
