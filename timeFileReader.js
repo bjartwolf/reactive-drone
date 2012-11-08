@@ -1,12 +1,12 @@
 // This thing reads a file line by line at a slow pace
 var fs = require('fs');
 var Stream = require('stream');
-var linestream = require('linestream').create('bebFile.txt');
+var linestream = require('linestream').create('output.txt');
 var zlib = require('zlib');
 var gzip = zlib.createGzip();
 
 // creating a slow linestream
-var timeInMsBetweenReadingLines = 1000;
+var timeInMsBetweenReadingLines = 10;
 var slowStream = new Stream();
 slowStream.writable = true;
 slowStream.write = function(val) {
@@ -16,11 +16,11 @@ slowStream.write = function(val) {
     } , timeInMsBetweenReadingLines);
     return false; 
 };
-slowStream.end = function(val) { console.log('end of stream');};
+slowStream.end = function(val) { slowStream.emit('end');console.log('end of stream');};
 
-// Creating a writeable filepipe 
-var fileOut = fs.createWriteStream('output.txt');
-var zipOut = fs.createWriteStream('zipout.txt');
+// Creating a writeable filepipe and a zip-pipe
+var fileOut = fs.createWriteStream('slettmeg.txt');
+var zipOut = fs.createWriteStream('slettmeg.txt.gz');
 
 //connecting pipes
 linestream.pipe(slowStream);
