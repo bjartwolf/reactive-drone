@@ -7,4 +7,5 @@ You can fly with a phone as remote while connected and record whatever you are d
 
 The timeFileReader will read the log file line by line with a timedelay and stream it out, this allows for simulation of code without using the AR Drone.
 
-
+Bacon is from here:
+https://github.com/raimohanska/bacon.js
