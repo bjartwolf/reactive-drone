@@ -1,4 +1,3 @@
-Juleblogg
-=========
-
-Reaktiv funksjonell programmering. Nå det er et snobbete...
+Nodecopter-stuff
+================
+For now this is pretty random stuff I make when playing with the NodeCopter. No modules in here...
