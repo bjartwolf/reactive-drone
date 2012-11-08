@@ -1,4 +1,7 @@
 // This thing reads a file line by line at a slow pace
+// and streams it out
+// The idea is that this stream can be used instead of the drone
+// when testing out new stuff
 var fs = require('fs');
 var Stream = require('stream');
 var linestream = require('linestream').create('output.txt');
