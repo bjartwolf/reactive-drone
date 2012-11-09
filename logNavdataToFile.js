@@ -1,9 +1,10 @@
-var zlib = require('zlib');
 console.log('Press enter to stop logging');
+// To read from standard in it is set to resume
 process.stdin.resume();
+var zlib = require('zlib');
 var gzip = zlib.createGzip();
 var arDrone = require('ar-drone');
-var bacon = require('./Bacon.js').Bacon;
+var bacon = require('bacon.js').Bacon;
 var fs = require('fs');
 var Stream = require('stream');
 
@@ -11,9 +12,8 @@ var client  = arDrone.createClient();
 
 var s = new Stream();//No paranthesis in stream-handbook.. why?
 s.readable = true;
+
 var eventStream = bacon.fromEventTarget(client, 'navdata'); 
-var testStream = bacon.sequentially(1000, [10, 11,13,14,15,16,16]); 
-//var filteredStream = testStream.filter(function(val) { return val%2===0;});
 eventStream.onValue(function(x) {
     s.emit('data', JSON.stringify(x) + "\n");
 });
@@ -26,4 +26,14 @@ var zipOut = fs.createWriteStream('zipout3.txt.gz');
 //s.pipe(process.stdout);
 s.pipe(fileOut);
 s.pipe(gzip).pipe(zipOut);
-process.stdin.on('data', function (chunk, key) {console.log('ending');s.emit('end');setTimeout(function() {process.exit(1);},1000)});
+
+// To end the stream when enter is pressed
+// It pauses for a second to make sure streams are closed, the zip-thingy 
+// breaks if quit to early. There has to be a better way...
+process.stdin.on('data', function () {
+    console.log('ending');
+    s.emit('end');
+    setTimeout(function() {
+        process.exit(1);}
+    ,1000)
+});

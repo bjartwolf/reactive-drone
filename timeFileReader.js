@@ -8,7 +8,7 @@ var linestream = require('linestream').create('output.txt');
 var zlib = require('zlib');
 var gzip = zlib.createGzip();
 
-var bacon = require('./Bacon.js').Bacon;
+var bacon = require('baconjs').Bacon;
 
 // creating a slow linestream
 var timeInMsBetweenReadingLines = 10;
