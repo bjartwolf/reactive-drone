@@ -1,10 +1,9 @@
-var arDrone = require('ar-drone');
+// Laster inn moduler
+var drone = require('ar-drone').createClient();
 var gzip = require('zlib').createGzip();
 var bacon = require('baconjs').Bacon;
 var Stream = require('stream');
 var fs = require('fs');
-
-var drone = arDrone.createClient();
 
 // Lager en strøm av eventer fra navdata
 var eventStream = bacon.fromEventTarget(drone, 'navdata'); 
@@ -18,7 +17,7 @@ eventStream.onValue(function(x) {
 });
 
 // Kobler alle strømmene sammen 
-jsonStream.pipe(gzip).pipe(fs.createWriteStream('logdata2.gz'));
+jsonStream.pipe(gzip).pipe(fs.createWriteStream('logdata.txt.gz'));
 
 // Resten er bare for å kunne stoppe loggingen
 // Den tar en liten pause for å være sikker på at filen er lukket skikkelig
