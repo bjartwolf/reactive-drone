@@ -1,9 +1,8 @@
+var linestream = require('linestream');
 var Stream = require('stream');
 var bacon = require('baconjs').Bacon;
 var json = require('stream-serializer').json;
-
-// Lager en strøm av linjer ved å lese filen output.txt linje for linje
-var linestream = require('linestream').create('output.txt');
+var JSONStream = require('JSONStream');
 
 // Her lager vi en stream som bremser hver gang den får data
 // og venter litt med å si at den er klar igjen
@@ -11,24 +10,17 @@ var linestream = require('linestream').create('output.txt');
 var slowStream = new Stream();
 slowStream.writable = true;
 slowStream.write = function(val) {
-    var speedOfSlowPipeInMs = 10;
     slowStream.emit('data', val);
     setTimeout(function () {
         slowStream.emit('drain');
-    } , speedOfSlowPipeInMs);
+    } , 10);
     // Hvis en stream returnerer false, vil alle
     // oppstrøms vente til den emitter drain, som jeg gjør etter 10 ms
     return false; 
 };
-
 // Det sendes et end-event på slutten av en strøm
 // Det må håndteres ellers kræsjer pipe'n
 slowStream.end = function(val) { slowStream.emit('end'); };
-
-/// Pipe strømmen av linjer inn i den treige strømmen
-linestream.pipe(slowStream);
-
-// Nå har vi en treig strøm av linjer som kommer inn
 
 // Lager en eventstrøm av den treige strømmen 
 var navDataStream = bacon.fromEventTarget(slowStream, 'data');
@@ -63,5 +55,7 @@ altitudeStream.onValue( function (x) {
     consoleStream.emit('data', x);
 });
 
-// Pipe strømmen av data fra consoleStrømmen igjennom en json-serializer og ut til konsollet 
+// Pipe strømmen av data fra consoleStrømmen igjennom en json-serializer så det blir tekst og ut til konsollet 
+linestream.create('output.txt').pipe(slowStream);
+// Pipe strømmen av linjer inn i den treige strømmen
 json(consoleStream).pipe(process.stdout);
