@@ -1,11 +1,11 @@
 var linestream = require('linestream');
 var SlowStream = require('./slowStream.js');
-var slowStream = new SlowStream(10);
 var bacon = require('baconjs').Bacon;
 var unzip = require('zlib').createGunzip();
 var fs = require('fs');
 
 var inp = fs.createReadStream('logdata.txt.gz').pipe(unzip);
+var slowStream = new SlowStream(10);
 linestream.create(inp).pipe(slowStream);
 
 // Lager en eventstrøm av den treige strømmen 
