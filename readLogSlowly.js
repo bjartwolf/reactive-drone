@@ -1,27 +1,9 @@
 var linestream = require('linestream');
-var Stream = require('stream');
+var SlowStream = require('./slowStream.js');
+var slowStream = new SlowStream(10);
 var bacon = require('baconjs').Bacon;
 var unzip = require('zlib').createGunzip();
 var fs = require('fs');
-// Her lager vi en stream som bremser hver gang den får data
-// og venter litt med å si at den er klar igjen
-// Jeg ser på det som et skikkelig trangt rør
-var slowStream = new Stream();
-slowStream.writable = true;
-slowStream.write = function(val) {
-    slowStream.emit('data', val);
-    // Hvis en stream returnerer false, vil alle
-    // oppstrøms vente til den emitter drain, som jeg gjør etter 10 ms
-    setTimeout(function () {
-        slowStream.emit('drain');
-    } , 10);
-    return false; 
-};
-
-// Det sendes et end-event på slutten av en strøm, det må håndteres
-// Det er flere ting som bør håndteres, slik som at den selv bør håndtere
-// at oppstrøms-strømmer ikke har data, men det hopper jeg over for at det blir klarere
-slowStream.end = function(val) { slowStream.emit('end'); };
 
 var inp = fs.createReadStream('logdata.txt.gz').pipe(unzip);
 linestream.create(inp).pipe(slowStream);
