@@ -1,7 +1,7 @@
 var linestream = require('linestream');
 var Stream = require('stream');
 var bacon = require('baconjs').Bacon;
-var gzip = require('zlib');
+var unzip = require('zlib').createGunzip();
 var fs = require('fs');
 // Her lager vi en stream som bremser hver gang den får data
 // og venter litt med å si at den er klar igjen
@@ -23,7 +23,7 @@ slowStream.write = function(val) {
 // at oppstrøms-strømmer ikke har data, men det hopper jeg over for at det blir klarere
 slowStream.end = function(val) { slowStream.emit('end'); };
 
-var inp = fs.createReadStream('logdata.txt');
+var inp = fs.createReadStream('logdata.txt.gz').pipe(unzip);
 linestream.create(inp).pipe(slowStream);
 
 // Lager en eventstrøm av den treige strømmen 
