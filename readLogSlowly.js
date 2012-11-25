@@ -4,9 +4,9 @@ var bacon = require('baconjs').Bacon;
 var unzip = require('zlib').createGunzip();
 var fs = require('fs');
 
-var inp = fs.createReadStream('logdata.txt.gz').pipe(unzip);
+var unzippedStream = fs.createReadStream('logdata.txt.gz').pipe(unzip);
 var slowStream = new SlowStream(10);
-linestream.create(inp).pipe(slowStream);
+linestream.create(unzippedStream).pipe(slowStream);
 
 // Lager en eventstrøm av den treige strømmen 
 var navDataStream = bacon.fromEventTarget(slowStream, 'data');
