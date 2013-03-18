@@ -6,6 +6,7 @@ var rx = require('rx');
 
 var slowInterval = rx.Observable.interval(10);
 
+// Utility function to make streams observable
 events.EventEmitter.prototype.toObservable = function(eventName) {
 	var parent = this;
 	return rx.Observable.create(function(observer) {
@@ -20,22 +21,16 @@ events.EventEmitter.prototype.toObservable = function(eventName) {
 };
 
 var unzippedStream = fs.createReadStream('logdata.txt.gz').pipe(unzip);
-var lines = linestream.create(unzippedStream);//.pipe(slowStream);
+var lines = linestream.create(unzippedStream);
 
 var navDataStream = lines.toObservable('data');
-var slowLines = navDataStream.zip(slowInterval, function (a,b) {
-    return a; // disposes the intervalstream, just workaround for delay
-});
-// Strømmen må parses fra JSON daten i filen
-// Det finnes biblioteker for å gjøre dette som en strøm, men de respekterer
-// ikke backpressure riktig
-var parsedStream = slowLines.select( function (val) {
-    return JSON.parse(val);
+var slowLines = navDataStream.zip(slowInterval, function (navdata, interval) {
+    return JSON.parse(navdata); // disposes the intervalstream, just workaround for delay
 });
 
 // Tar en strøm av navdata og returnerer kun data der dronen er i flymodus og 
 // høyden er over 1 cm
-var flyingStream = parsedStream.where(function (navdata) {
+var flyingStream = slowLines.where(function (navdata) {
     return navdata.droneState.flying === 1 && navdata.demo.altitudeMeters > 0.01;
 });
 
