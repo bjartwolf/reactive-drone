@@ -5,6 +5,7 @@
     "ar-drone": "0.0.4",
     "winston": "~0.6.2",
     "linestream": "~0.3.2",
-    "baconjs": "0.0.2"
+    "baconjs": "0.0.2",
+    "rx": "~2.1.1"
   }
 }

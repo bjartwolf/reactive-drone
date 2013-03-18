@@ -13,3 +13,5 @@ Just do
 npm install 
 (replace the linestream file with the one that comes from the npm package)
 node readLogSlowly.js 
+
+also, there seems to be something wrong in requiring modules in rx.node.js so I have commented out some stuff there
