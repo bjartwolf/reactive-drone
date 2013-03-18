@@ -1,6 +1,6 @@
 var linestream = require('linestream');
-var events = require('events');
 var SlowStream = require('./slowStream.js');
+var events = require('events');
 var unzip = require('zlib').createGunzip();
 var fs = require('fs');
 var rx = require('rx');
@@ -20,11 +20,11 @@ events.EventEmitter.prototype.toObservable = function(eventName) {
 
 var unzippedStream = fs.createReadStream('logdata.txt.gz').pipe(unzip);
 var slowStream = new SlowStream(10);
-linestream.create(unzippedStream).pipe(slowStream);
+var slowLines = linestream.create(unzippedStream).pipe(slowStream);
 
 // Lager en eventstrøm av den treige strømmen 
-var navDataStream = slowStream.toObservable('data');
 
+var navDataStream = slowLines.toObservable('data');
 // Strømmen må parses fra JSON daten i filen
 // Det finnes biblioteker for å gjøre dette som en strøm, men de respekterer
 // ikke backpressure riktig
