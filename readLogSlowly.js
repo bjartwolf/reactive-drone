@@ -7,18 +7,7 @@ var rx = require('rx');
 var slowInterval = rx.Observable.interval(10);
 
 // Utility function to make streams observable
-events.EventEmitter.prototype.toObservable = function(eventName) {
-	var parent = this;
-	return rx.Observable.create(function(observer) {
-		var handler = function(o) {
-			observer.onNext(o);
-		};
-		parent.addListener(eventName, handler);
-		return function() {
-			parent.removeListener(eventName, handler);
-		};
-	});
-};
+events.EventEmitter.prototype.toObservable = require('./toObservable.js');
 
 var unzippedStream = fs.createReadStream('logdata.txt.gz').pipe(unzip);
 var lines = linestream.create(unzippedStream);
