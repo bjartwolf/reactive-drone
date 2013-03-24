@@ -13,9 +13,9 @@ var arDrone = require('ar-drone');
 
 var client = arDrone.createClient();
 client.toObservable('navdata').
-    select(function (val) {
-        var stamp = Date.now();
-        return {key: stamp, value: val};
+    select(function (navdata) {
+        var timestamp = Date.now();
+        return {key: timestamp, value: navdata};
     }).
     writeToStream(db.createWriteStream()).
     writeToStream(process.stdout, serialize = true);
