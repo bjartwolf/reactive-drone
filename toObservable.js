@@ -1,5 +1,6 @@
 var rx = require('rx');
-var toObservable = function(eventName) {
+var toObservable = function() {
+    var eventName = 'data';
 	var parent = this;
 	return rx.Observable.create(function(observer) {
 		var handler = function(o) {
