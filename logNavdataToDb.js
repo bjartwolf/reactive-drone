@@ -12,7 +12,7 @@ rx.Observable.prototype.writeToStream = require('./writeToStream.js');
 var arDrone = require('ar-drone');
 
 var client = arDrone.createClient();
-client.toObservable('navdata').toObservable().
+client.toObservable('navdata').
     select(function (val) {
         var stamp = Date.now();
         return {key: stamp, value: val};
