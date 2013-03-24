@@ -5,20 +5,16 @@ var events = require('events');
 // Utility function to make streams observable
 events.EventEmitter.prototype.toObservable = require('./toObservable.js');
 
-var fs = require('fs');
 var rx = require('rx');
 // Utility function to pipe observables to streams 
 rx.Observable.prototype.writeToStream = require('./writeToStream.js');  
 
-var linestream = require('linestream');
+var arDrone = require('ar-drone');
 
-var unzippedStream = fs.createReadStream('logdata.txt');
-var lines = linestream.create(unzippedStream);
-var stamp = Date.now();
-
-lines.toObservable().
+var client = arDrone.createClient();
+client.toObservable('navdata').toObservable().
     select(function (val) {
-        stamp +=1;
+        var stamp = Date.now();
         return {key: stamp, value: val};
     }).
     writeToStream(db.createWriteStream()).
