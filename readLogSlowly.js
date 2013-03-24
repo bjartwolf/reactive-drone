@@ -13,9 +13,7 @@ rx.Observable.prototype.writeToStream = require('./writeToStream.js');
 var SlowStream = require('./slowStream.js');
 var slowStream = new SlowStream(20);
 
-dbStream = db.createReadStream();
-dbStream.pipe(slowStream).
-    toObservable().
+db.createReadStream().pipe(slowStream).toObservable().
     select(function (keyValue) {
         return JSON.parse(keyValue.value);
     }).
