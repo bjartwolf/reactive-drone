@@ -3,9 +3,8 @@
   "version": "0.0.1",
   "dependencies": {
     "ar-drone": "0.0.4",
-    "winston": "~0.6.2",
-    "linestream": "~0.3.2",
-    "levelup": "~0.6.2",
-    "rx": "~2.1.1"
+    "levelup": "0.8",
+    "rx": "2.1.2",
+    "linestream": "~0.3.2"
   }
 }
