@@ -8,14 +8,14 @@ SlowStream.prototype = Object.create(stream.Transform.prototype, {
 });
 
 function SlowStream(options) {
-  //stream.Transform.call(this, options);
   stream.Transform.call(this, {objectMode : true});
 }
 
 SlowStream.prototype._transform = function(chunk, encoding, done) {
-  var self = this;
+  // Does not transform, just push the chunck out again
+  this.push(chunk);
+  // Waits with emitting done to slow stream down
   setTimeout(function() { 
-    self.push(chunk);
     done();
   } ,20)
 };
