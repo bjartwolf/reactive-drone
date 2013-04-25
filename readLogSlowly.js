@@ -7,11 +7,11 @@ events.EventEmitter.prototype.toObservable = require('./toObservable.js');
 
 var rx = require('rx');
 // Utility function to pipe observables to streams 
-rx.Observable.prototype.writeToStream = require('./writeToStream.js');  
+rx.Observable.prototype.serializeAndWriteToStream = require('./writeToStream.js').serializeAndWriteToStream;  
 
 // A stream that just emits one event every n-miliseconds
 var SlowStream = require('./slowStream.js');
-var slowStream = new SlowStream(20);
+var slowStream = new SlowStream(2);
 
 db.createReadStream().pipe(slowStream).toObservable().
     select(function (keyValue) {
@@ -23,5 +23,4 @@ db.createReadStream().pipe(slowStream).toObservable().
     select(function (val) {
         return {height: val.demo.altitudeMeters, 
                 compass: val.demo.clockwiseDegrees };
-    }).
-    writeToStream(process.stdout, serialize = true); 
+    }).serializeAndWriteToStream(process.stdout);
