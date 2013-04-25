@@ -7,7 +7,8 @@ events.EventEmitter.prototype.toObservable = require('./toObservable.js');
 
 var rx = require('rx');
 // Utility function to pipe observables to streams 
-rx.Observable.prototype.writeToStream = require('./writeToStream.js');  
+rx.Observable.prototype.serializeAndWriteToStream = require('./writeToStream.js').serializeAndWriteToStream;  
+rx.Observable.prototype.writeToStream = require('./writeToStream.js').writeToStream;  
 
 var arDrone = require('ar-drone');
 
@@ -18,4 +19,4 @@ client.toObservable('navdata').
         return {key: timestamp, value: navdata};
     }).
     writeToStream(db.createWriteStream()).
-    writeToStream(process.stdout, serialize = true);
+    serializeAndWriteToStream(process.stdout);
