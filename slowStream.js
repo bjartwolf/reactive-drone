@@ -7,8 +7,9 @@ SlowStream.prototype = Object.create(stream.Transform.prototype, {
   constructor: { value: SlowStream }
 });
 
-function SlowStream(options) {
-  stream.Transform.call(this, {objectMode : true});
+function SlowStream(delay) {
+  this.delay = delay || 20;
+  stream.Transform.call(this, {objectMode: true}); 
 }
 
 SlowStream.prototype._transform = function(chunk, encoding, done) {
@@ -17,7 +18,7 @@ SlowStream.prototype._transform = function(chunk, encoding, done) {
   // Waits with emitting done to slow stream down
   setTimeout(function() { 
     done();
-  } ,20)
+  } , this.delay)
 };
 
 module.exports = SlowStream;
